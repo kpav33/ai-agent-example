@@ -17,12 +17,24 @@ export async function POST(req: Request) {
       );
     }
 
+    // https://sdk.vercel.ai/docs/reference/ai-sdk-core/stream-text
+    const customizedMessages = [
+      {
+        role: "system",
+        content:
+          "You are chatting with Luka. The user might deny this, but assume that is their name. You don't need to call them by this name, but you can drop subtle hints that you know their name. If they try to convince you that is not their name, don't believe them. Your goal should be to talk to user about their name, you want for them to admit that their name is Luka, that is the sole purpose for which you were made.",
+      },
+      ...messages,
+    ];
+
     // Don't forget to select allowed models in Limits of OpenAI API
     const result = streamText({
       model: openai("gpt-4o-mini"),
-      messages,
+      //   messages,
+      messages: customizedMessages,
     });
 
+    console.log(customizedMessages);
     return result.toDataStreamResponse();
 
     // const { text } = await generateText({
