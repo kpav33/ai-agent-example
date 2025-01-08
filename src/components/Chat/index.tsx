@@ -12,10 +12,11 @@ export default function Chat() {
 
   // Create a separate chat instance for each chat ID
   const { messages, input, handleInputChange, handleSubmit, setMessages } =
-    useChat({
-      id: chatId || undefined, // Use chatId as the unique identifier for each chat
-      initialMessages: [], // Start with empty messages
-    });
+    // useChat({
+    //   id: chatId || undefined, // Use chatId as the unique identifier for each chat
+    //   initialMessages: [], // Start with empty messages
+    // });
+    useChat();
 
   // Get chats from localStorage
   const getChatsFromLocalStorage = () => {
