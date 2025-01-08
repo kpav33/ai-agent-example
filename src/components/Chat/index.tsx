@@ -12,10 +12,6 @@ export default function Chat() {
 
   // Create a separate chat instance for each chat ID
   const { messages, input, handleInputChange, handleSubmit, setMessages } =
-    // useChat({
-    //   id: chatId || undefined, // Use chatId as the unique identifier for each chat
-    //   initialMessages: [], // Start with empty messages
-    // });
     useChat();
 
   // Get chats from localStorage
@@ -26,8 +22,6 @@ export default function Chat() {
 
   // Save chats to localStorage
   const saveChatToLocalStorage = (id: string, messages: any) => {
-    // console.log("saveChatToLocalStorage");
-    // console.log(id, messages);
     localStorage.setItem(`chat_${id}`, JSON.stringify(messages));
   };
 
@@ -87,6 +81,34 @@ export default function Chat() {
     setMessages(savedMessages);
   };
 
+  const deleteChat = (idToDelete: string) => {
+    // Remove from localStorage
+    localStorage.removeItem(`chat_${idToDelete}`);
+
+    // Update chat list
+    setChatList((prev) => {
+      const updatedChats = prev.filter((id) => id !== idToDelete);
+      localStorage.setItem("chatList", JSON.stringify(updatedChats));
+      return updatedChats;
+    });
+
+    // If we're deleting the current chat, just set chatId to null
+    if (idToDelete === chatId) {
+      setChatId(null);
+    }
+  };
+
+  // Handle chat switching after deletion
+  useEffect(() => {
+    if (chatId === null && chatList.length > 0) {
+      // Switch to the first available chat
+      switchChat(chatList[0]);
+    } else if (chatList.length === 0) {
+      // Clear messages if no chats remain
+      setMessages([]);
+    }
+  }, [chatId, chatList]);
+
   // Automatically create a new chat if no chat is active
   const handleInputChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!chatId) {
@@ -125,17 +147,27 @@ export default function Chat() {
     >
       {/* Chat Selector */}
       <div className="flex items-center justify-between p-4 border-b">
-        <select
-          value={chatId || ""}
-          onChange={(e) => switchChat(e.target.value)}
-          className="p-2 border rounded"
-        >
-          {chatList.map((id) => (
-            <option key={id} value={id}>
-              {id}
-            </option>
-          ))}
-        </select>
+        <div className="flex items-center flex-1">
+          <select
+            value={chatId || ""}
+            onChange={(e) => switchChat(e.target.value)}
+            className="p-2 border rounded"
+          >
+            {chatList.map((id) => (
+              <option key={id} value={id}>
+                {id}
+              </option>
+            ))}
+          </select>
+          {chatId && (
+            <button
+              onClick={() => deleteChat(chatId)}
+              className="px-3 py-2 ml-2 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+          )}
+        </div>
         <button
           onClick={createNewChat}
           className="px-4 py-2 ml-2 bg-green-500 text-white rounded hover:bg-green-600"
