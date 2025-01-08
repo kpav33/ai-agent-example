@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       messages: customizedMessages,
     });
 
-    console.log(customizedMessages);
+    // console.log(customizedMessages);
     return result.toDataStreamResponse();
 
     // const { text } = await generateText({
