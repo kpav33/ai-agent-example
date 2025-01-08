@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { useChat } from "ai/react";
 
+// Rework or add better yet add ChatSupabase component, that instead of using localstorage uses Supabase for storing users chat data and we can also add basic authentication for our app
 export default function Chat() {
   const [chatId, setChatId] = useState<string | null>(null);
   const [chatList, setChatList] = useState<string[]>([]);
@@ -28,6 +29,7 @@ export default function Chat() {
   // Load a chat from localStorage
   const loadChatFromLocalStorage = (id: string) => {
     const chat = localStorage.getItem(`chat_${id}`);
+    // console.log(JSON.parse(chat));
     return chat ? JSON.parse(chat) : [];
   };
 
