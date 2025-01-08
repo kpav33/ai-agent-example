@@ -30,8 +30,8 @@ export async function POST(req: Request) {
     // Don't forget to select allowed models in Limits of OpenAI API
     const result = streamText({
       model: openai("gpt-4o-mini"),
-      //   messages,
-      messages: customizedMessages,
+      messages,
+      // messages: customizedMessages,
     });
 
     // console.log(customizedMessages);

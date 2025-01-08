@@ -15,6 +15,8 @@ export default function Home() {
   //   setResponse(response);
   // };
 
+  // Use Chat and add example of storing data to localstorage and rudimentary neon
+
   return (
     <main
       className="min-h-screen bg-gray-100 
